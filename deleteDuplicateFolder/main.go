@@ -26,6 +26,7 @@ func deleteDuplicateFolder(paths [][]string) [][]string {
 	}
 	freq := make(map[string]int)
 	var construct func(root *Trie)
+	// post-order traversal to construct serialization
 	construct = func(root *Trie) {
 		if len(root.children) == 0 {
 			return
@@ -49,6 +50,7 @@ func deleteDuplicateFolder(paths [][]string) [][]string {
 	ans := make([][]string, 0)
 	path := make([]string, 0)
 	var operate func(root *Trie)
+	// pre-order traversal to collect non-duplicate folders
 	operate = func(root *Trie) {
 		if freq[root.serial] > 1 {
 			return
@@ -58,6 +60,7 @@ func deleteDuplicateFolder(paths [][]string) [][]string {
 			copy(tmp, path)
 			ans = append(ans, tmp)
 		}
+		// traverse children in lexicographical order
 		for folder, child := range root.children {
 			path = append(path, folder)
 			operate(child)
@@ -69,5 +72,6 @@ func deleteDuplicateFolder(paths [][]string) [][]string {
 }
 
 func main() {
+	fmt.Println(deleteDuplicateFolder([][]string{{"c"}, {"d"}, {"c", "b"}, {"c", "a"}, {"d", "ab"}}))
 	fmt.Println(deleteDuplicateFolder([][]string{{"a"}, {"c"}, {"d"}, {"a", "b"}, {"c", "b"}, {"d", "a"}}))
 }
