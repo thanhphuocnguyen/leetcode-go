@@ -16,7 +16,7 @@ func maxIceCream(costs []int, coins int) int {
 }
 
 func countingSort(arr []int) []int {
-	mini := arr[0]
+	// mini := arr[0]
 	maxi := arr[0]
 	for _, num := range arr {
 		maxi = max(maxi, num)
