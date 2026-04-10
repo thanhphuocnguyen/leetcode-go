@@ -1,0 +1,12 @@
+package main
+
+import "fmt"
+
+func canBeEqual(s1 string, s2 string) bool {
+	return ((s1[0] == s2[0] && s1[2] == s2[2]) || (s1[0] == s2[2] && s1[2] == s2[0])) && ((s1[1] == s2[1] && s1[3] == s2[3]) || (s1[1] == s2[3] && s1[3] == s2[1]))
+}
+
+func main() {
+	fmt.Println(canBeEqual("abcd", "dacb"))
+	fmt.Println(canBeEqual("abcd", "cdab"))
+}
