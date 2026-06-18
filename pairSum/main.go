@@ -1,5 +1,7 @@
 package main
 
+import "fmt"
+
 /**
  * Definition for singly-linked list.
  * type ListNode struct {
@@ -13,16 +15,42 @@ type ListNode struct {
 }
 
 func pairSum(head *ListNode) int {
-	var vals = [100000]int{}
-	i := 0
-	for head != nil {
-		vals[i] = head.Val
-		i++
-		head = head.Next
+	// find mid of ll
+	// reverse from mid to tail
+	// find max sum of head + revHead from til n/2
+	fast, slow := head, head
+	n := 0
+	for fast != nil && fast.Next != nil {
+		fast = fast.Next.Next
+		slow = slow.Next
+		n++
 	}
+
+	mid := reverse(slow)
 	ans := 0
-	for j := 0; j < i/2; j++ {
-		ans = max(ans, vals[j]+vals[i-j-1])
+	for i := 0; i < n; i++ {
+		ans = max(ans, head.Val+mid.Val)
+		head = head.Next
+		mid = mid.Next
 	}
 	return ans
+}
+
+func reverse(node *ListNode) *ListNode {
+	var prev *ListNode
+	curr := node
+	// 1 -> 2 -> 3
+	// 1 next = nil, then 2 2.next = 1->nil, prev = curr
+	for curr != nil {
+		next := curr.Next
+		curr.Next = prev
+		prev = curr
+		curr = next
+	}
+	return prev
+}
+
+func main() {
+	list := &ListNode{Val: 5, Next: &ListNode{Val: 4, Next: &ListNode{Val: 2, Next: &ListNode{Val: 1}}}}
+	fmt.Println(pairSum(list))
 }

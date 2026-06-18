@@ -7,7 +7,9 @@ import (
 func shipWithinDays(weights []int, days int) int {
 	lo, hi := 0, 0
 	for _, num := range weights {
-		lo = max(lo, num)
+		if num > lo {
+			lo = num
+		}
 		hi += num
 	}
 
@@ -21,9 +23,12 @@ func shipWithinDays(weights []int, days int) int {
 				currDays++
 				total = num
 			}
+			if currDays > days {
+				return true
+			}
 		}
 
-		return currDays > days
+		return false
 	}
 
 	for lo < hi {
