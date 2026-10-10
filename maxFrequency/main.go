@@ -8,32 +8,48 @@ import (
 func maxFrequency(nums []int, k int, numOperations int) int {
 	// sort array
 	sort.Ints(nums)
-	// init ans is always 1 element
 	ans := 0
-	// using binary search to find lower bound and upper bound of current element
-	for i, num := range nums {
-		lb := lowerBound(nums, i, num-k)
-		ub := upperBound(nums, i, num+k)
-		start, end := i, i
-		if lb != len(nums) {
-			start = lb
+	freq := make(map[int]int)
+	left := 0
+	for right := 0; right < len(nums); right++ {
+		freq[right]++
+		for nums[right]-nums[left] > 2*k {
+			left++
 		}
-		if ub != len(nums) {
-			end = ub
-		}
-		curr := 1
-		for i := start; i < end; i++ {
-			if nums[i] == nums[i+1] {
-				curr++
-			} else if numOperations > 0 {
-				curr++
-				numOperations--
-			}
-		}
-		ans = max(ans, curr)
-	}
 
+		windowSize := right - left + 1
+		existing := freq[right]
+		canChange := windowSize - existing
+
+		size := existing + min(canChange, numOperations)
+		if size > ans {
+			ans = size
+		}
+	}
 	return ans
+	// using binary search to find lower bound and upper bound of current element
+	// for i, num := range nums {
+	// 	lb := lowerBound(nums, i, num-k)
+	// 	ub := upperBound(nums, i, num+k)
+	// 	start, end := i, i
+	// 	if lb != len(nums) {
+	// 		start = lb
+	// 	}
+	// 	if ub != len(nums) {
+	// 		end = ub
+	// 	}
+	// 	curr := 1
+	// 	for i := start; i < end; i++ {
+	// 		if nums[i] == nums[i+1] {
+	// 			curr++
+	// 		} else if numOperations > 0 {
+	// 			curr++
+	// 			numOperations--
+	// 		}
+	// 	}
+	// 	ans = max(ans, curr)
+	// }
+
 }
 
 func lowerBound(nums []int, end, target int) int {
@@ -67,6 +83,7 @@ func upperBound(nums []int, start, target int) int {
 }
 
 func main() {
+	fmt.Println(maxFrequency([]int{1, 90}, 76, 1))
 	fmt.Println(maxFrequency([]int{2}, 7, 0))
 	fmt.Println(maxFrequency([]int{5, 11, 20, 20}, 5, 1))
 	fmt.Println(maxFrequency([]int{1, 4, 5}, 1, 2))
